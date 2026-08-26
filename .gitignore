@@ -13,3 +13,4 @@ dist/
 # sistema
 .DS_Store
 Thumbs.db
+.superpowers/
