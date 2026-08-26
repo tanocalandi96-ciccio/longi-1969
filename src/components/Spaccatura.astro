@@ -1,0 +1,46 @@
+---
+// Divisore a taglio diagonale: le due meta' (rossa e blu) si chiudono come
+// lo scudo del club mentre il divisore attraversa lo schermo, legate allo
+// scroll. Senza animation-timeline o con reduced-motion: taglio statico.
+interface Props { inverti?: boolean }
+const { inverti = false } = Astro.props;
+---
+<div class:list={["spaccatura", { inverti }]} aria-hidden="true">
+  <span class="meta rossa"></span>
+  <span class="meta blu"></span>
+</div>
+<style>
+  .spaccatura {
+    position: relative;
+    height: clamp(4rem, 12vw, 9rem);
+    overflow: hidden;
+  }
+  .meta { position: absolute; inset: 0; }
+  .rossa { background: var(--rosso); clip-path: polygon(0 0, 55% 0, 45% 100%, 0 100%); }
+  .blu { background: var(--blu); clip-path: polygon(55% 0, 100% 0, 100% 100%, 45% 100%); }
+  .inverti .rossa { background: var(--blu); }
+  .inverti .blu { background: var(--rosso); }
+  /* SOLO proprieta' animation-* estese: vedi Global Constraints. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .rossa {
+        animation-name: chiusura-sx; animation-duration: 1s;
+        animation-fill-mode: both; animation-timing-function: var(--ease-out-quart);
+        animation-timeline: view(); animation-range: cover 0% cover 100%;
+      }
+      .blu {
+        animation-name: chiusura-dx; animation-duration: 1s;
+        animation-fill-mode: both; animation-timing-function: var(--ease-out-quart);
+        animation-timeline: view(); animation-range: cover 0% cover 100%;
+      }
+    }
+  }
+  @keyframes chiusura-sx {
+    from { transform: translateX(-46%); }
+    to { transform: translateX(0); }
+  }
+  @keyframes chiusura-dx {
+    from { transform: translateX(46%); }
+    to { transform: translateX(0); }
+  }
+</style>

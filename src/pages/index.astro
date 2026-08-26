@@ -1,8 +1,26 @@
 ---
 import Base from "../layouts/Base.astro";
+import Spaccatura from "../components/Spaccatura.astro";
 ---
 <Base title="Home">
   <main id="main" tabindex="-1">
-    <h1>Longi 1969</h1>
+    <!-- BLOCCO DI PROVA: rimosso dal task Home -->
+    <section style="min-height: 100vh;">
+      <h1>Longi 1969</h1>
+    </section>
+
+    <Spaccatura />
+
+    <!-- BLOCCO DI PROVA: rimosso dal task Home -->
+    <section style="min-height: 100vh;">
+      <h2>Blocco intermedio</h2>
+    </section>
+
+    <Spaccatura inverti />
+
+    <!-- BLOCCO DI PROVA: rimosso dal task Home -->
+    <section style="min-height: 100vh;">
+      <h2>Blocco finale</h2>
+    </section>
   </main>
 </Base>
