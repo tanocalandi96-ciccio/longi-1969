@@ -1,0 +1,4 @@
+---
+nome: Sirna
+ruolo: Centrocampista
+---
