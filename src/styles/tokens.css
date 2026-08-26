@@ -1,0 +1,13 @@
+:root {
+  /* Palette dallo stemma Longi 1969 (scudo dimezzato rosso/blu, leone d'oro) */
+  --bg: oklch(0.2 0.04 262);           /* blu notte, meta' destra dello scudo */
+  --surface: oklch(0.25 0.05 262);
+  --text: oklch(0.96 0.008 75);        /* bianco caldo, mai puro */
+  --rosso: oklch(0.55 0.21 27);        /* meta' sinistra dello scudo */
+  --rosso-fondo: oklch(0.34 0.13 27);  /* rosso profondo per sezioni drenched */
+  --blu: oklch(0.32 0.12 265);
+  --oro: oklch(0.82 0.15 92);          /* leone */
+  --font-display: "Alfa Slab One", "Georgia", serif;
+  --font-body: "Archivo", "Segoe UI", sans-serif;
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}

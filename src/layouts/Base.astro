@@ -1,0 +1,91 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+interface Props { title: string; description?: string }
+const { title, description = "Sito ufficiale Longi 1969" } = Astro.props;
+const fullTitle = `${title} - Longi 1969`;
+// Astro.site non è ancora configurato (dominio non deciso): finché non lo sarà
+// queste URL restano assolute solo rispetto all'origine corrente. Nessun
+// dominio è inventato qui.
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+const ogImage = new URL("/img/og.jpg", Astro.site ?? Astro.url).href;
+---
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="it_IT" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Salta al contenuto</a>
+    <Header />
+    <slot />
+    <Footer />
+    <!-- CookieNotice: arriva col task GDPR -->
+    <script>
+      // Ripiego per il reveal dei titoli nei browser senza animation-timeline
+      // (Firefox, Safari meno recenti): stessa resa, via IntersectionObserver.
+      // Dove view() esiste ci pensa il CSS e questo script non tocca nulla.
+      const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduced && !CSS.supports("animation-timeline: view()")) {
+        const titles = document.querySelectorAll("main h2, main [data-reveal]");
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add("reveal-on");
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: "0px 0px -20% 0px" }
+        );
+        for (const t of titles) {
+          t.classList.add("reveal-js");
+          io.observe(t);
+        }
+      }
+    </script>
+  </body>
+</html>
+<style>
+  .skip-link {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding: 0.75rem 1.25rem;
+    background: var(--oro);
+    color: var(--bg);
+    font-family: var(--font-display);
+    text-decoration: none;
+    transform: translateY(-110%);
+    transition: transform 0.2s var(--ease-out-quart);
+  }
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .skip-link {
+      transition: none;
+    }
+  }
+</style>

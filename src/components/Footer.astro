@@ -1,0 +1,58 @@
+---
+// I dati societari arrivano da src/data/societa.json, modificabile dal
+// pannello: la societa' puo' correggerli da sola. I campi vuoti spariscono
+// invece di lasciare righe a meta'.
+import societa from "../data/societa.json";
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-club">
+      <p class="font-display club-name">{societa.denominazioneBreve}</p>
+      <p>{societa.comune}</p>
+      {societa.campoNome && <p>Campo sportivo &quot;{societa.campoNome}&quot;</p>}
+      <p>Seconda Categoria Sicilia, Girone C 2026/27</p>
+    </div>
+    <div class="footer-social">
+      <p class="footer-heading">Seguici</p>
+      <ul>
+        {societa.instagram && <li><a href={societa.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>}
+        {societa.facebook && <li><a href={societa.facebook} target="_blank" rel="noopener noreferrer">Facebook</a></li>}
+      </ul>
+    </div>
+    <div class="footer-legal">
+      <p class="footer-heading">Dati societari</p>
+      <p>{societa.denominazioneBreve} &middot; {societa.indirizzo || societa.comune}</p>
+      {societa.codiceFiscale && <p>C.F. {societa.codiceFiscale}{societa.matricolaFigc && ` · matricola FIGC ${societa.matricolaFigc}`}</p>}
+      {societa.email && <p><a href={`mailto:${societa.email}`}>{societa.email}</a></p>}
+      <p><a href="/privacy">Privacy</a></p>
+    </div>
+  </div>
+  <p class="footer-copy">
+    &copy; {year} {societa.denominazioneBreve}
+    <span class="firma">
+      Powered by{" "}
+      <a href="https://elevadigital.it" target="_blank" rel="noopener">Eleva Digital</a>
+    </span>
+  </p>
+</footer>
+<style>
+  .site-footer { background: var(--surface); color: var(--text); padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2.5rem) 1.5rem; margin-top: 3rem; }
+  .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+  .club-name { font-size: 1.1rem; margin-bottom: 0.5rem; }
+  .footer-club p, .footer-legal p { margin: 0.25rem 0; }
+  .footer-heading { font-family: var(--font-display); font-size: 0.95rem; text-transform: uppercase; margin-bottom: 0.5rem; color: var(--oro); }
+  .footer-social ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+  a { color: var(--text); }
+  a:hover { color: var(--oro); }
+  .footer-copy { text-align: center; max-width: 1200px; margin: 2rem auto 0; padding-top: 1rem; border-top: 1px solid var(--oro); font-size: 0.85rem; }
+  /* Firma dello studio: presente ma discreta, va a capo su schermi stretti. */
+  .firma { display: inline-block; margin-left: 0.5rem; color: color-mix(in oklch, var(--text) 62%, transparent); }
+  .firma::before { content: "·"; margin-right: 0.5rem; }
+  .firma a { color: color-mix(in oklch, var(--text) 78%, transparent); text-decoration: none; border-bottom: 1px solid color-mix(in oklch, var(--oro) 55%, transparent); }
+  .firma a:hover, .firma a:focus-visible { color: var(--oro); border-bottom-color: var(--oro); }
+  @media (max-width: 480px) {
+    .firma { display: block; margin: 0.4rem 0 0; }
+    .firma::before { content: none; }
+  }
+</style>
