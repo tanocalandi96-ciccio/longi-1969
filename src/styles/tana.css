@@ -1,0 +1,106 @@
+/* Atmosfera "tana del leone" — la firma ambientale di Longi.
+   Due strati fissi, puro CSS, progressive enhancement:
+   1. braci d'oro che salgono lente dal fondo (due nuvole di punti sfocati
+      con deriva verticale sfalsata);
+   2. vignetta calda che chiude gli angoli, come luce di brace.
+   Il gemello di Galati usa riflettori freddi e nebbia blu: qui il clima e'
+   l'opposto, caldo e basso. Tutto spento con prefers-reduced-motion. */
+
+@media (prefers-reduced-motion: no-preference) {
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -20% -5%;
+    pointer-events: none;
+    z-index: 1;
+    /* Braci: punti radiali d'oro/rosso a densita' bassa, due taglie. */
+    background-image:
+      radial-gradient(3px 3px at 12% 88%, oklch(0.82 0.15 92 / 0.5), transparent 60%),
+      radial-gradient(2px 2px at 34% 72%, oklch(0.73 0.16 55 / 0.45), transparent 60%),
+      radial-gradient(3px 3px at 58% 92%, oklch(0.82 0.15 92 / 0.4), transparent 60%),
+      radial-gradient(2px 2px at 71% 65%, oklch(0.66 0.19 40 / 0.4), transparent 60%),
+      radial-gradient(2px 2px at 87% 80%, oklch(0.82 0.15 92 / 0.45), transparent 60%),
+      radial-gradient(3px 3px at 45% 60%, oklch(0.73 0.16 55 / 0.3), transparent 60%);
+    background-size: 100% 100%;
+    filter: blur(0.5px);
+    animation-name: braci-salgono;
+    animation-duration: 16s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    opacity: 0.9;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    /* Vignetta calda: chiude i bordi bassi con un respiro lento. */
+    background: radial-gradient(
+      120% 90% at 50% 30%,
+      transparent 55%,
+      oklch(0.28 0.09 40 / 0.28) 100%
+    );
+    animation-name: brace-respira;
+    animation-duration: 9s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+}
+
+@keyframes braci-salgono {
+  from { transform: translateY(12%); opacity: 0; }
+  12% { opacity: 0.9; }
+  85% { opacity: 0.7; }
+  to { transform: translateY(-14%); opacity: 0; }
+}
+
+@keyframes brace-respira {
+  from { opacity: 0.65; }
+  to { opacity: 1; }
+}
+
+/* Titoli di sezione: reveal a TAGLIO DIAGONALE legato allo scroll — la
+   grammatica dello scudo dimezzato applicata al testo. Diverso dal gemello
+   (taglio orizzontale): qui la lama passa obliqua.
+   SOLO proprieta' animation-* estese: il minificatore fonde la scorciatoia
+   con animation-timeline e il browser scarta tutto (bug documentato). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    main h2 {
+      animation-name: taglio-diagonale;
+      animation-duration: 1s;
+      animation-fill-mode: both;
+      animation-timing-function: var(--ease-out-quart);
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+  }
+}
+
+@keyframes taglio-diagonale {
+  from {
+    clip-path: polygon(-15% 0, 0 0, -30% 100%, -45% 100%);
+    transform: translateX(-0.3em);
+  }
+  to {
+    clip-path: polygon(0 0, 130% 0, 115% 100%, -15% 100%);
+    transform: translateX(0);
+  }
+}
+
+/* Ripiego senza animation-timeline: lo script in Base.astro marca i titoli
+   con .reveal-js e accende .reveal-on via IntersectionObserver. */
+main h2.reveal-js {
+  clip-path: polygon(-15% 0, 0 0, -30% 100%, -45% 100%);
+  transform: translateX(-0.3em);
+  transition:
+    clip-path 0.9s var(--ease-out-quart),
+    transform 0.9s var(--ease-out-quart);
+}
+main h2.reveal-on {
+  clip-path: polygon(0 0, 130% 0, 115% 100%, -15% 100%);
+  transform: translateX(0);
+}

@@ -2,6 +2,7 @@
 @import "@fontsource/archivo/400.css";
 @import "@fontsource/archivo/700.css";
 @import "./tokens.css";
+@import "./tana.css";
 
 * { box-sizing: border-box; margin: 0; }
 html { color-scheme: dark; }

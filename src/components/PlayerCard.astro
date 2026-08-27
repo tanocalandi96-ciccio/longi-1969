@@ -48,13 +48,43 @@ const alt = hasFoto ? `Foto di ${nome}` : `Segnaposto: foto non disponibile per 
     cursor: pointer;
     width: 100%;
     transition: transform 0.25s var(--ease-out-quart);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
   }
   .player-card:hover,
   .player-card:focus-visible {
     transform: translateY(-3px);
   }
+  /* Colpo di luce del leone: una lama dorata obliqua attraversa la card
+     su hover/focus. Solo trasformazioni (compositor), niente layout. */
+  .player-card::after {
+    content: "";
+    position: absolute;
+    inset: -20% auto -20% -45%;
+    width: 35%;
+    background: linear-gradient(
+      105deg,
+      transparent,
+      oklch(0.82 0.15 92 / 0.28) 45%,
+      oklch(0.95 0.1 92 / 0.42) 50%,
+      oklch(0.82 0.15 92 / 0.28) 55%,
+      transparent
+    );
+    transform: translateX(0) skewX(-12deg);
+    pointer-events: none;
+    z-index: 1;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .player-card:hover::after,
+    .player-card:focus-visible::after {
+      transition: transform 0.55s var(--ease-out-quart);
+      transform: translateX(480%) skewX(-12deg);
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     .player-card { transition: none; }
+    .player-card::after { display: none; }
   }
   .photo-wrap {
     position: relative;

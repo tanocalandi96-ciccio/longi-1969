@@ -102,6 +102,17 @@ Transitions cross-documento riusate (tecnica invisibile condivisa, non
 identitaria): la testata resta ferma, la copertina di una news si trasforma
 nell'immagine dell'articolo.
 
+
+### Firma di differenziazione dal gemello Galati (27/08/2026)
+
+Grammatica propria: "tutto taglia in diagonale, la tana respira braci d'oro".
+
+- **Atmosfera tana** (`src/styles/tana.css`): braci dorate che salgono + vignetta calda che respira. Galati ha riflettori freddi e nebbia: qui il clima e' l'opposto termico.
+- **Titoli di sezione**: reveal a taglio diagonale scroll-driven (Galati taglia orizzontale).
+- **Tabelloni partita**: wipe diagonale con clip-path (il tunnel prospettico resta a Galati).
+- **Fascia sponsor**: banda inclinata di -2 gradi che taglia la pagina scura.
+- **Card giocatori**: lama di luce dorata obliqua su hover/focus (il colpo del leone).
+
 ## Componenti chiave
 
 - **HeroProvvisorio**: sezione 100vh, stemma centrato su fondo `--bg`,

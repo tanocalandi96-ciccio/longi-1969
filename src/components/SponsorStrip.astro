@@ -46,6 +46,11 @@ const sponsors = (await getCollection("sponsor")).sort(
     background: oklch(0.95 0.008 75);
     padding: clamp(2.5rem, 6vw, 4rem) 0;
     overflow: hidden;
+    /* Banda inclinata: la fascia chiara taglia la pagina scura in obliquo,
+       come la Spaccatura. scale compensa gli angoli scoperti dalla
+       rotazione; il margine evita che il taglio mangi le sezioni vicine. */
+    transform: rotate(-2deg) scale(1.04);
+    margin-block: clamp(1.5rem, 4vw, 3rem);
   }
   .inner {
     max-width: 1200px;
