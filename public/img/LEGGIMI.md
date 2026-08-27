@@ -4,7 +4,7 @@
 
 | File | Dove | Cosa serve al suo posto |
 |---|---|---|
-| `stemma.png` | HeroProvvisorio (home), header/favicon | Copia scalata di `stemma-500.png`. Oggi è un raster scaricato dalla scheda squadra su Tuttocampo, pensato per una miniatura sul loro sito, non per un hero a piena pagina: serve lo **stemma vettoriale del club** (AI/EPS/SVG/PDF). Se il club non lo possiede, va rivettorializzato da un grafico partendo da questo PNG e dalla descrizione ufficiale (scudo dimezzato rosso/blu, leone d'oro rampante, scritta LONGI 1969, bordo tricolore, Trinacria in basso) |
+| `stemma.png` | header/favicon | Copia scalata di `stemma-500.png`. Oggi è un raster scaricato dalla scheda squadra su Tuttocampo, pensato per una miniatura sul loro sito, non per un hero a piena pagina: serve lo **stemma vettoriale del club** (AI/EPS/SVG/PDF). Se il club non lo possiede, va rivettorializzato da un grafico partendo da questo PNG e dalla descrizione ufficiale (scudo dimezzato rosso/blu, leone d'oro rampante, scritta LONGI 1969, bordo tricolore, Trinacria in basso) |
 | `stemma-500.png` | sorgente per `stemma.png` e per i prompt dell'hero Seedance (Task 6) | Stessa nota sopra: sostituire appena arriva il vettoriale, poi rigenerare `stemma.png` da quello |
 
 I due file arrivano da `assets/stemma-tuttocampo-150.png` e
