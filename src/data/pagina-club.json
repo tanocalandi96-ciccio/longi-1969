@@ -1,0 +1,35 @@
+{
+  "storia": [
+    "Il Longi nasce nel 1969: la data compare sullo stemma del club, lo scudo dimezzato rosso e blu con il leone d'oro. Nel 2022 la società si ritira dal campionato di Prima Categoria e resta ferma per tre stagioni.",
+    "La rifondazione arriva nella stagione 2024/25. L'anno dopo, nel 2025/26, la squadra vince il campionato di Terza Categoria del girone di Barcellona P.G. con 32 punti, frutto di 10 vittorie, 2 pareggi e una sola sconfitta: 19 gol fatti e appena 4 subiti, la miglior difesa del girone.",
+    "La stessa stagione porta anche il Trofeo delle Province: nella finale al \"Pippo Giacobbe\" di Rocca di Caprileone, il Longi rimonta lo 0-2 iniziale contro il Real Academy Acquedolci fino al 2-2 e vince ai calci di rigore per 6-5.",
+    "Nella stagione 2026/27 la squadra debutta in Seconda Categoria, girone C."
+  ],
+  "tappe": [
+    {
+      "anno": "1969",
+      "titolo": "La fondazione",
+      "testo": "Il Longi nasce nel 1969, come tramanda lo stemma del club. Dettagli sui primi decenni di storia: da confermare con la società."
+    },
+    {
+      "anno": "2022",
+      "titolo": "Il ritiro",
+      "testo": "La società si ritira dal campionato di Prima Categoria. Seguono tre stagioni di assenza dal calcio giocato."
+    },
+    {
+      "anno": "2024",
+      "titolo": "La rifondazione",
+      "testo": "Nella stagione 2024/25 il Longi riparte. Categoria di ripartenza e dettagli della prima stagione: da confermare con la società."
+    },
+    {
+      "anno": "2026",
+      "titolo": "Il double",
+      "testo": "Vittoria del campionato di Terza Categoria, girone di Barcellona P.G. (32 punti, 10 vittorie, 2 pareggi, 1 sconfitta, 19 gol fatti e 4 subiti, miglior difesa) e Trofeo delle Province: al \"Pippo Giacobbe\" di Rocca di Caprileone, rimonta sul Real Academy Acquedolci dallo 0-2 al 2-2 e vittoria ai rigori per 6-5."
+    },
+    {
+      "anno": "2026/27",
+      "titolo": "Seconda Categoria, girone C",
+      "testo": "La squadra debutta in Seconda Categoria, girone C, forte della promozione conquistata sul campo."
+    }
+  ]
+}

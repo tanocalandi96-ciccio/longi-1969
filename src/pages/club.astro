@@ -1,0 +1,75 @@
+---
+import Base from "../layouts/Base.astro";
+// Storia arriva da src/data/pagina-club.json, modificabile dal pannello: la
+// societa' puo' correggere il proprio testo senza sviluppatore. La timeline
+// completa vive nella pagina Storia (arriva in un task successivo): qui
+// resta solo il riassunto con le tappe verificate.
+import paginaClub from "../data/pagina-club.json";
+---
+<Base title="Club" description="La storia e il campo del Longi 1969">
+  <main id="main" tabindex="-1">
+    <section class="storia">
+      <div class="inner">
+        <h1 class="font-display">Il Club</h1>
+        {paginaClub.storia.map((par) => <p>{par}</p>)}
+        <p class="rimando"><a href="/storia">La storia completa del Longi</a></p>
+      </div>
+    </section>
+
+    <section class="campo">
+      <div class="inner">
+        <h2 class="font-display">Il campo</h2>
+        <p class="campo-nome">Campo comunale di Longi (nome da confermare)</p>
+        <p class="campo-nota">L'indirizzo esatto e la mappa saranno pubblicati non appena confermati dalla società.</p>
+        <!-- mappa: arriva col task GDPR -->
+      </div>
+    </section>
+  </main>
+</Base>
+<style>
+  .inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .storia {
+    padding: clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 2.5rem) clamp(2rem, 5vw, 3rem);
+  }
+  .storia h1 {
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    margin: 0 0 1.5rem;
+  }
+  .storia p {
+    max-width: 65ch;
+  }
+  .rimando {
+    margin-top: 1.5rem;
+  }
+  .rimando a {
+    color: var(--oro);
+    text-decoration: none;
+  }
+  .rimando a:hover,
+  .rimando a:focus-visible {
+    text-decoration: underline;
+  }
+  .campo {
+    background: var(--surface);
+    padding: clamp(2.5rem, 6vw, 4rem) clamp(1rem, 4vw, 2.5rem) clamp(3rem, 7vw, 5rem);
+  }
+  .campo h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    margin: 0 0 1rem;
+  }
+  .campo-nome {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 1.15rem;
+    color: var(--oro);
+    margin: 0;
+  }
+  .campo-nota {
+    margin: 0.5rem 0 0;
+    color: color-mix(in oklch, var(--text) 72%, transparent);
+    font-size: 0.9rem;
+  }
+</style>
