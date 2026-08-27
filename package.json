@@ -8,8 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "frames": "node scripts/extract-hero-frames.mjs && python scripts/build-mobile-hero.py",
-    "test": "vitest run --passWithNoTests",
+    "frames": "node scripts/extract-hero-frames.mjs",
+    "test": "vitest run",
     "guida-pdf": "node scripts/guida-pdf.mjs"
   },
   "dependencies": {

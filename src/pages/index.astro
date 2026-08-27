@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
-import HeroProvvisorio from "../components/HeroProvvisorio.astro";
+import Hero from "../components/Hero.astro";
 import NewsCard from "../components/NewsCard.astro";
 import Spaccatura from "../components/Spaccatura.astro";
 import SponsorStrip from "../components/SponsorStrip.astro";
@@ -14,7 +14,7 @@ const news = (await getCollection("news"))
 ---
 <Base title="Home">
   <main id="main" tabindex="-1">
-    <HeroProvvisorio />
+    <Hero />
 
     <DirettaLive />
 

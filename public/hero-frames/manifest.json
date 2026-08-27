@@ -1,0 +1,14 @@
+{
+  "desktop": {
+    "count": 70,
+    "width": 1926,
+    "height": 1076,
+    "kb": 3611
+  },
+  "mobile": {
+    "count": 40,
+    "width": 1080,
+    "height": 1920,
+    "kb": 2197
+  }
+}
