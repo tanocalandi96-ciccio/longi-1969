@@ -76,9 +76,11 @@ const srcVideo = urlVideo
     font-size: 0.85rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    /* --rosso puro sul fondo rossastro qui sotto sta a ~2.9:1. Schiarito
-       verso --text: 5.47:1 (verificato via OKLCH -> luminanza, vedi report). */
-    color: color-mix(in oklch, var(--rosso) 60%, var(--text));
+    /* --rosso puro sul fondo rossastro qui sotto sta a ~2.9:1. Valore
+       fisso e non color-mix verso --text: l'interpolazione oklch fa
+       virare la hue all'arancio. Hue dello stemma (27), 5.41:1 sul fondo
+       del riquadro (verificato via OKLCH -> luminanza). */
+    color: oklch(0.71 0.13 27);
   }
   .pallino {
     width: 9px;

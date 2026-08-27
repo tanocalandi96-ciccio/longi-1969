@@ -167,13 +167,15 @@ function scalaAnno(anno: string) {
     font-variant-numeric: tabular-nums;
   }
   /* Anni non in --oro: --rosso/--blu puri contro --bg/--surface stanno
-     sotto 4.5:1 (fino a ~1.4:1 per --blu). Schiariti verso --text quel
-     tanto che basta a restare AA su ENTRAMBI i fondi possibili (l'anno
-     puo' cadere su --bg o --surface a seconda della striscia), verificato
-     via OKLCH -> luminanza (vedi report): blu 45% = 5.93:1 su --bg,
-     5.25:1 su --surface; rosso 55% = 7.42:1 su --bg, 6.57:1 su --surface. */
-  .anno-tappa.rosso { color: color-mix(in oklch, var(--rosso) 55%, var(--text)); }
-  .anno-tappa.blu { color: color-mix(in oklch, var(--blu) 45%, var(--text)); }
+     sotto 4.5:1 (fino a ~1.4:1 per --blu). Valori fissi, NON color-mix
+     verso --text: l'interpolazione oklch percorre l'arco corto della hue
+     e da 265 (blu) a 75 (testo caldo) passa dal magenta, cioe' il blu
+     diventava rosa. Qui la hue resta quella dello stemma (27 e 265);
+     contrasti verificati su ENTRAMBI i fondi possibili (l'anno puo'
+     cadere su --bg o --surface a seconda della striscia):
+     rosso 7.34:1/6.49:1, blu 6.25:1/5.53:1. */
+  .anno-tappa.rosso { color: oklch(0.73 0.12 27); }
+  .anno-tappa.blu { color: oklch(0.68 0.09 265); }
   .anno-tappa.oro { color: var(--oro); }
 
   .cifra,
