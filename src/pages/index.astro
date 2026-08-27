@@ -5,6 +5,8 @@ import HeroProvvisorio from "../components/HeroProvvisorio.astro";
 import NewsCard from "../components/NewsCard.astro";
 import Spaccatura from "../components/Spaccatura.astro";
 import SponsorStrip from "../components/SponsorStrip.astro";
+import NextMatch from "../components/NextMatch.astro";
+import DirettaLive from "../components/DirettaLive.astro";
 
 const news = (await getCollection("news"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -13,6 +15,8 @@ const news = (await getCollection("news"))
 <Base title="Home">
   <main id="main" tabindex="-1">
     <HeroProvvisorio />
+
+    <DirettaLive />
 
     <section class="news-section" aria-labelledby="news-title">
       <div class="section-inner">
@@ -26,7 +30,7 @@ const news = (await getCollection("news"))
 
     <Spaccatura />
 
-    <!-- NextMatch: arriva col task widget Tuttocampo -->
+    <NextMatch />
 
     <Spaccatura inverti />
 
