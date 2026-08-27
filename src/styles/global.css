@@ -32,27 +32,30 @@ img { max-width: 100%; display: block; }
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-old(root) {
     animation-name: pagina-esce;
-    animation-duration: 0.2s;
+    animation-duration: 0.22s;
     animation-timing-function: ease-in;
     animation-fill-mode: both;
   }
+  /* Sipario diagonale: la pagina nuova si rivela con la lama obliqua dello
+     scudo, da sinistra a destra. Diverso dal gemello (scorrimento verticale). */
   ::view-transition-new(root) {
-    animation-name: pagina-entra;
-    animation-duration: 0.32s;
+    animation-name: pagina-sipario;
+    animation-duration: 0.38s;
     animation-timing-function: var(--ease-out-quart);
     animation-fill-mode: both;
   }
 }
 @keyframes pagina-esce {
   to {
-    opacity: 0;
-    transform: translateY(-0.75rem);
+    opacity: 0.35;
   }
 }
-@keyframes pagina-entra {
+@keyframes pagina-sipario {
   from {
-    opacity: 0;
-    transform: translateY(1.25rem);
+    clip-path: polygon(-25% 0, 0 0, -25% 100%, -50% 100%);
+  }
+  to {
+    clip-path: polygon(0 0, 150% 0, 125% 100%, -25% 100%);
   }
 }
 

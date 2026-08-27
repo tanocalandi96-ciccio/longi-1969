@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import PlayerCard from "../components/PlayerCard.astro";
-import PlayerWall from "../components/PlayerWall.astro";
+import MuroRosa from "../components/MuroRosa.astro";
 import PlayerDialog from "../components/PlayerDialog.astro";
 
 const ROLE_ORDER = ["Portiere", "Difensore", "Centrocampista", "Attaccante"] as const;
@@ -26,7 +26,7 @@ const staff = (await getCollection("staff")).sort(
   (a, b) => a.data.ordine - b.data.ordine || a.data.nome.localeCompare(b.data.nome, "it")
 );
 
-// La parete curva mostra tutta la rosa in ordine di ruolo e numero: e' il
+// Il muro rossoblu' mostra tutta la rosa in ordine di ruolo e numero: e' il
 // colpo d'occhio. La griglia raggruppata sotto resta la consultazione vera.
 const rosaOrdinata = [...giocatori].sort(
   (a, b) =>
@@ -43,7 +43,7 @@ const rosaOrdinata = [...giocatori].sort(
       </div>
     </section>
 
-    {rosaOrdinata.length > 0 && <PlayerWall players={rosaOrdinata} />}
+    {rosaOrdinata.length > 0 && <MuroRosa players={rosaOrdinata} />}
 
     {gruppi.length > 0 ? (
       gruppi.map((gruppo, i) => (

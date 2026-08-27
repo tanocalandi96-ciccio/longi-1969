@@ -78,6 +78,7 @@ const titolo = page.currentPage > 1 ? `News, pagina ${page.currentPage}` : "News
     color: var(--oro);
     margin: 0 0 2rem;
   }
+  /* Mosaico sfalsato come in home: colonna centrale piu' bassa. */
   .news-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -85,10 +86,11 @@ const titolo = page.currentPage > 1 ? `News, pagina ${page.currentPage}` : "News
   }
   @media (min-width: 720px) {
     .news-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
+      align-items: start;
     }
-    .news-grid > :global(a:first-child) {
-      grid-column: span 2;
+    .news-grid > :global(a:nth-child(3n + 2)) {
+      margin-top: clamp(1.5rem, 4vw, 3rem);
     }
   }
 
