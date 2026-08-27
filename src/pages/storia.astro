@@ -1,0 +1,332 @@
+---
+import Base from "../layouts/Base.astro";
+import Spaccatura from "../components/Spaccatura.astro";
+import storia from "../data/storia.json";
+
+// Il double (tappa "2026") spacca la timeline in due: prima arrivano le
+// tappe fino alla vittoria, poi la sezione punteggio a parte, poi la
+// ripartenza. Si cerca l'anno invece di usare un indice fisso: l'ordine
+// resta corretto anche se il pannello (Task 10) riordina le tappe.
+const trovato = storia.tappe.findIndex((t) => t.anno === "2026");
+// Fallback: se manca una tappa con anno "2026" (dato pannello incompleto),
+// tutte le tappe finiscono prima del finale invece che tutte dopo.
+const indiceDouble = trovato === -1 ? storia.tappe.length - 1 : trovato;
+const primaDelDouble = storia.tappe.slice(0, indiceDouble + 1);
+const dopoIlDouble = storia.tappe.slice(indiceDouble + 1);
+
+// Coro di GALATI applicato alle cifre dell'anno invece che alle parole:
+// ogni cifra e' un .cifra con --i, i separatori ("/" in 2026/27, "-" nella
+// tappa senza date certe) restano semplice testo, sempre visibile.
+function spezzaAnno(anno: string) {
+  let i = 0;
+  return [...anno].map((carattere) =>
+    /[0-9]/.test(carattere)
+      ? { carattere, cifra: true as const, i: i++ }
+      : { carattere, cifra: false as const, i: 0 }
+  );
+}
+
+// Alternanza rosso/blu per tappa; il double (2026) resta sempre oro.
+function coloreAnno(anno: string, indice: number): "rosso" | "blu" | "oro" {
+  if (anno === "2026") return "oro";
+  return indice % 2 === 0 ? "rosso" : "blu";
+}
+
+// L'anno gigante e' tarato per 4 cifre: clamp(4rem, 18vw, 12rem). Le tappe
+// con anni piu' lunghi ("1970-2021", "2026/27") scalano l'intera terna in
+// proporzione, cosi' la larghezza del testo resta la stessa e non sfonda
+// lo schermo invece di ingrandire un testo piu' lungo (vedi report per i
+// conti a 375px).
+function scalaAnno(anno: string) {
+  const fattore = Math.max(1, anno.length / 4);
+  const num = (n: number) => (n / fattore).toFixed(2);
+  return `--fmin:${num(4)}rem; --fpref:${num(18)}vw; --fmax:${num(12)}rem;`;
+}
+---
+<Base title="Storia" description="La storia del Longi 1969, dallo stemma del 1969 al double del 2026">
+  <main id="main" tabindex="-1">
+    <section class="intro">
+      <div class="inner">
+        <h1 class="font-display">Storia</h1>
+        <p class="kicker">Le tappe verificate del Longi, dallo stemma del 1969 alla rinascita del 2026.</p>
+      </div>
+    </section>
+
+    {primaDelDouble.map((t, indice) => (
+      <section class:list={["tappa", { alterna: indice % 2 === 1 }]}>
+        <div class="inner">
+          <span class={`anno-tappa font-display ${coloreAnno(t.anno, indice)}`} data-coro style={scalaAnno(t.anno)}>
+            {spezzaAnno(t.anno).map((c) =>
+              c.cifra ? (
+                <span class="cifra" style={`--i:${c.i}`}>{c.carattere}</span>
+              ) : (
+                <span class="separatore">{c.carattere}</span>
+              )
+            )}
+          </span>
+          <div class="tappa-testo" data-reveal>
+            <h2 class="font-display">{t.titolo}</h2>
+            <p>{t.testo}</p>
+          </div>
+        </div>
+      </section>
+    ))}
+
+    <Spaccatura />
+
+    <section class="finale-double" aria-labelledby="finale-title">
+      <div class="inner">
+        <div class="finale-intro" data-reveal>
+          <h2 id="finale-title" class="font-display">{storia.finale.titolo}</h2>
+          <p class="sottotitolo">{storia.finale.sottotitolo}</p>
+        </div>
+        <div class="punteggi" data-coro>
+          {storia.finale.righe.map((riga, i) => (
+            <div
+              class:list={["riga-punteggio", { oro: i === storia.finale.righe.length - 1 }]}
+              style={`--i:${i}`}
+            >
+              <span class="punteggio font-display">{riga}</span>
+              <span class="etichetta">{storia.finale.etichette[i]}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Spaccatura inverti />
+
+    {dopoIlDouble.map((t, indice) => (
+      <section class:list={["tappa", { alterna: indice % 2 === 1 }]}>
+        <div class="inner">
+          <span
+            class={`anno-tappa font-display ${coloreAnno(t.anno, indiceDouble + 1 + indice)}`}
+            data-coro
+            style={scalaAnno(t.anno)}
+          >
+            {spezzaAnno(t.anno).map((c) =>
+              c.cifra ? (
+                <span class="cifra" style={`--i:${c.i}`}>{c.carattere}</span>
+              ) : (
+                <span class="separatore">{c.carattere}</span>
+              )
+            )}
+          </span>
+          <div class="tappa-testo" data-reveal>
+            <h2 class="font-display">{t.titolo}</h2>
+            <p>{t.testo}</p>
+          </div>
+        </div>
+      </section>
+    ))}
+  </main>
+</Base>
+<style>
+  .inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .intro {
+    padding: clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 2.5rem) clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .intro h1 {
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    margin: 0 0 0.5rem;
+  }
+  .kicker {
+    color: var(--oro);
+    max-width: 55ch;
+  }
+
+  .tappa {
+    padding: clamp(2.5rem, 7vw, 4.5rem) clamp(1rem, 4vw, 2.5rem);
+  }
+  /* Classe esplicita invece di :nth-of-type(even): quest'ultimo conta i
+     <section> fratelli (intro, finale-double, Spaccatura...), quindi
+     l'alternanza si sfasava a seconda di cosa c'era prima. Con la classe
+     l'indice viene dal map, non dai fratelli. */
+  .tappa.alterna {
+    background: var(--surface);
+  }
+  .tappa .inner {
+    max-width: 1100px;
+    display: grid;
+    gap: clamp(1rem, 4vw, 2rem);
+    align-items: center;
+  }
+  @media (min-width: 780px) {
+    .tappa .inner {
+      grid-template-columns: auto 1fr;
+    }
+  }
+
+  .anno-tappa {
+    display: block;
+    font-size: clamp(var(--fmin), var(--fpref), var(--fmax));
+    line-height: 0.85;
+    font-variant-numeric: tabular-nums;
+  }
+  /* Anni non in --oro: --rosso/--blu puri contro --bg/--surface stanno
+     sotto 4.5:1 (fino a ~1.4:1 per --blu). Valori fissi, NON color-mix
+     verso --text: l'interpolazione oklch percorre l'arco corto della hue
+     e da 265 (blu) a 75 (testo caldo) passa dal magenta, cioe' il blu
+     diventava rosa. Qui la hue resta quella dello stemma (27 e 265);
+     contrasti verificati su ENTRAMBI i fondi possibili (l'anno puo'
+     cadere su --bg o --surface a seconda della striscia):
+     rosso 7.34:1/6.49:1, blu 6.25:1/5.53:1. */
+  .anno-tappa.rosso { color: oklch(0.73 0.12 27); }
+  .anno-tappa.blu { color: oklch(0.68 0.09 265); }
+  .anno-tappa.oro { color: var(--oro); }
+
+  .cifra,
+  .separatore {
+    display: inline-block;
+  }
+
+  .tappa-testo h2 {
+    font-size: clamp(1.4rem, 3.5vw, 2rem);
+    margin: 0 0 0.5rem;
+  }
+  .tappa-testo p {
+    max-width: 60ch;
+  }
+
+  /* Coro delle cifre: nascoste SOLO quando lo script gira (.coro-pronto),
+     poi entrano una alla volta quando l'osservatore accende .coro-on.
+     Stesso meccanismo di GALATI (parola-coro), qui sulle cifre dell'anno
+     e sulle righe del punteggio: vedi lo script in fondo alla pagina. */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-coro].coro-pronto .cifra {
+      opacity: 0;
+      transform: translateY(0.45em);
+    }
+    [data-coro].coro-on .cifra {
+      animation-name: cifra-coro;
+      animation-duration: 0.32s;
+      animation-fill-mode: forwards;
+      animation-timing-function: var(--ease-out-quart);
+      animation-delay: calc(var(--i) * 90ms);
+    }
+  }
+  @keyframes cifra-coro {
+    from { opacity: 0; transform: translateY(0.45em); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* Reveal di titolo+testo: NON sono h2 di pagina con un CSS globale gia'
+     pronto (qui non esiste), quindi il view() e il fallback JS (in
+     Base.astro, generico per ogni [data-reveal]) hanno bisogno di questo
+     blocco scoped. SOLO proprieta' animation-* estese: il minificatore
+     fonde la scorciatoia con animation-timeline e il browser scarta tutto
+     (bug documentato in GALATI). */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      [data-reveal] {
+        animation-name: tappa-entra;
+        animation-duration: 0.8s;
+        animation-fill-mode: both;
+        animation-timing-function: var(--ease-out-quart);
+        animation-timeline: view();
+        animation-range: entry 0% cover 30%;
+      }
+    }
+  }
+  @keyframes tappa-entra {
+    from { opacity: 0; transform: translateY(1.5rem); }
+    to { opacity: 1; transform: none; }
+  }
+  [data-reveal].reveal-js {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition: opacity 0.8s var(--ease-out-quart), transform 0.8s var(--ease-out-quart);
+  }
+  [data-reveal].reveal-on {
+    opacity: 1;
+    transform: none;
+  }
+
+  .finale-double {
+    background: var(--rosso-fondo);
+    padding: clamp(3rem, 8vw, 5rem) clamp(1rem, 4vw, 2.5rem);
+  }
+  .finale-double .inner {
+    max-width: 900px;
+    text-align: center;
+  }
+  .finale-double h2 {
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    margin: 0 0 0.75rem;
+  }
+  .sottotitolo {
+    max-width: 60ch;
+    margin: 0 auto clamp(2rem, 5vw, 3rem);
+    color: color-mix(in oklch, var(--text) 85%, transparent);
+  }
+
+  .punteggi {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1rem, 3vw, 1.5rem);
+    align-items: center;
+  }
+  .punteggio {
+    display: inline-block;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .riga-punteggio .etichetta {
+    display: block;
+    font-size: 0.9rem;
+    margin-top: 0.35rem;
+    color: color-mix(in oklch, var(--text) 70%, transparent);
+  }
+  .riga-punteggio.oro .punteggio,
+  .riga-punteggio.oro .etichetta {
+    color: var(--oro);
+  }
+
+  /* Righe del punteggio: stesso coro, ma un pattern a se' (nomi ed --i
+     diversi) perche' qui la riga intera e' l'unita' che entra, non la
+     singola cifra. */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-coro].coro-pronto .riga-punteggio {
+      opacity: 0;
+      transform: translateY(0.6em);
+    }
+    [data-coro].coro-on .riga-punteggio {
+      animation-name: riga-coro;
+      animation-duration: 0.4s;
+      animation-fill-mode: forwards;
+      animation-timing-function: var(--ease-out-quart);
+      animation-delay: calc(var(--i) * 300ms);
+    }
+  }
+  @keyframes riga-coro {
+    from { opacity: 0; transform: translateY(0.6em); }
+    to { opacity: 1; transform: none; }
+  }
+</style>
+<script>
+  // Coro: ogni [data-coro] della pagina (le cifre di un anno, le righe del
+  // punteggio finale) entra a scatti quando IL SUO elemento arriva in vista,
+  // non tutti insieme al caricamento. coro-pronto nasconde i figli SOLO a
+  // script attivo: senza JS il testo resta visibile da subito (stesso
+  // meccanismo di GALATI, esteso a piu' elementi indipendenti).
+  const cori = document.querySelectorAll<HTMLElement>("[data-coro]");
+  if (cori.length && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    for (const el of cori) el.classList.add("coro-pronto");
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("coro-on");
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { rootMargin: "0px 0px -25% 0px" }
+    );
+    for (const el of cori) io.observe(el);
+  }
+</script>

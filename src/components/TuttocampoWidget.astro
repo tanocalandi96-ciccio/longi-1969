@@ -1,0 +1,214 @@
+---
+import { WIDGET_URLS, TEAM_PAGE } from "../lib/tuttocampo";
+import EmbedConsenso from "./EmbedConsenso.astro";
+
+type WidgetType = "classifica" | "risultati" | "marcatori" | "partita" | "prossimaPartita";
+interface Props {
+  type: WidgetType;
+  title: string;
+}
+const { type, title } = Astro.props;
+
+const widgetUrl = WIDGET_URLS[type];
+
+// Un widget senza dati (campionato non iniziato) restituisce una sola frase,
+// alta 120px, che dentro un riquadro da 600px galleggia nel vuoto. Peggio: e'
+// il messaggio di Tuttocampo, non il nostro. Quindi al momento della
+// compilazione si chiede al widget se ha dati: se e' vuoto si mostra il testo
+// d'attesa del sito, curato e coerente; se ha dati si mostra il widget vero.
+//
+// Conseguenza da conoscere: quando il campionato parte, il passaggio avviene
+// alla prima ricompilazione del sito, non nell'istante esatto. Basta una
+// pubblicazione dal pannello, o una ricompilazione programmata su Netlify.
+async function haDati(url: string): Promise<boolean> {
+  try {
+    const risposta = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    if (!risposta.ok) return true; // in dubbio si mostra il widget
+    const testo = (await risposta.text()).replace(/<[^>]+>/g, " ");
+    return !/non ancora (?:disponibil|present)/i.test(testo);
+  } catch {
+    // Rete assente o Tuttocampo irraggiungibile durante la compilazione: si
+    // mostra il widget, che a quel punto gestisce da solo il proprio stato.
+    return true;
+  }
+}
+
+// GUID segnaposto (vedi lib/tuttocampo.ts): interrogare Tuttocampo in build
+// non avrebbe senso, quindi si salta il fetch e si va dritti al fallback.
+const guidSegnaposto = widgetUrl?.includes("INSERIRE-GUID") ?? true;
+const widgetAttivo = widgetUrl && !guidSegnaposto ? await haDati(widgetUrl) : false;
+
+const FALLBACK_COPY: Record<WidgetType, { kicker: string; testo: string }> = {
+  classifica: {
+    kicker: "Classifica non ancora disponibile",
+    testo:
+      "La classifica non è ancora disponibile: la stagione 2026/27 non è ancora iniziata. Non appena si gioca la prima giornata, qui trovi la classifica aggiornata in automatico.",
+  },
+  risultati: {
+    kicker: "Risultati non ancora disponibili",
+    testo:
+      "I risultati non sono ancora disponibili: la stagione 2026/27 non è ancora iniziata. Non appena si gioca la prima giornata, qui trovi l'esito di ogni partita in automatico.",
+  },
+  marcatori: {
+    kicker: "Marcatori non ancora disponibili",
+    testo:
+      "Nessuno ha ancora segnato: la stagione 2026/27 non è cominciata. Dalla prima giornata questa sarà la classifica dei cannonieri del girone.",
+  },
+  partita: {
+    kicker: "Nessuna partita giocata",
+    testo:
+      "La stagione 2026/27 non è ancora iniziata. Qui comparirà il tabellino dell'ultima gara disputata.",
+  },
+  prossimaPartita: {
+    kicker: "Prossima partita non ancora fissata",
+    testo:
+      "Il calendario della stagione 2026/27 non è ancora uscito. Appena il girone parte, qui trovi data, ora e avversario del prossimo impegno in automatico.",
+  },
+};
+const { kicker, testo } = FALLBACK_COPY[type];
+
+// Altezze consigliate da Tuttocampo per ciascun widget: la classifica di un
+// girone ha molte righe, il box della prossima partita e' compatto.
+// Valori ereditati da Galati (girone diverso, numero di squadre diverso):
+/* altezze da rimisurare col GUID reale */
+const MIN_HEIGHT: Record<WidgetType, string> = {
+  classifica: "700px",
+  risultati: "600px",
+  marcatori: "620px",
+  partita: "380px",
+  prossimaPartita: "380px",
+};
+
+const boxId = `widget-box-${type}`;
+const fallbackId = `widget-fallback-${type}`;
+---
+<div class="tuttocampo-widget" style={{ "--widget-min-height": MIN_HEIGHT[type] }}>
+  {widgetAttivo ? (
+    <>
+      <div class="widget-box" id={boxId}>
+        <EmbedConsenso
+          src={widgetUrl}
+          title={title}
+          servizio="Tuttocampo"
+          altezza={MIN_HEIGHT[type]}
+          nota="Classifica e risultati sono forniti da Tuttocampo. Per mostrarli il browser deve collegarsi ai loro server, che possono impostare cookie propri."
+        />
+      </div>
+      <p class="fallback-text hidden" id={fallbackId}>
+        Il widget non è al momento disponibile.{" "}
+        <a href={TEAM_PAGE} target="_blank" rel="noopener noreferrer">Scheda su Tuttocampo</a>
+      </p>
+      <script define:vars={{ boxId, fallbackId }}>
+        // L'iframe non e' nel markup: EmbedConsenso lo clona dentro il box
+        // solo dopo il consenso (subito se gia' salvato, altrimenti al click).
+        // Il timeout di 10s puo' quindi partire solo quando l'iframe compare
+        // per davvero, altrimenti scatterebbe anche a consenso non dato,
+        // nascondendo pure il prompt di consenso stesso.
+        const box = document.getElementById(boxId);
+        const fallbackText = document.getElementById(fallbackId);
+
+        function aggancia(iframe) {
+          const timeoutId = window.setTimeout(() => {
+            box?.classList.add("widget-failed");
+            fallbackText?.classList.remove("hidden");
+          }, 10000);
+          iframe.addEventListener("load", () => {
+            window.clearTimeout(timeoutId);
+            box?.classList.remove("widget-failed");
+            fallbackText?.classList.add("hidden");
+          });
+        }
+
+        const iframeEsistente = box?.querySelector("iframe");
+        if (iframeEsistente) {
+          aggancia(iframeEsistente);
+        } else if (box) {
+          const osservatore = new MutationObserver(() => {
+            const iframe = box.querySelector("iframe");
+            if (iframe) {
+              osservatore.disconnect();
+              aggancia(iframe);
+            }
+          });
+          osservatore.observe(box, { childList: true, subtree: true });
+        }
+      </script>
+    </>
+  ) : (
+    <div class:list={["fallback-block", { "fallback-block--feature": type === "classifica" }]}>
+      <p class="kicker">{kicker}</p>
+      <p>{testo}</p>
+      <a class="tuttocampo-link" href={TEAM_PAGE} target="_blank" rel="noopener noreferrer">
+        Scheda su Tuttocampo
+      </a>
+    </div>
+  )}
+</div>
+<style>
+  .widget-box iframe {
+    width: 100%;
+    min-height: var(--widget-min-height, 400px);
+    border: none;
+  }
+  .widget-box.widget-failed {
+    display: none;
+  }
+  .fallback-text.hidden {
+    display: none;
+  }
+  .fallback-block {
+    background: var(--bg);
+    border-radius: 4px;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    text-align: center;
+  }
+  .kicker {
+    color: var(--oro);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+    margin: 0 0 0.75rem;
+  }
+  .fallback-block p:not(.kicker) {
+    max-width: 55ch;
+    margin: 0 auto 1.5rem;
+    color: var(--text);
+  }
+  /* Trattamento dedicato alla Classifica: niente card centrata, composizione
+     asimmetrica allineata a sinistra e tipografia più grande, per darle un
+     peso diverso dalle altre sezioni nello stato di fallback. */
+  .fallback-block--feature {
+    background: transparent;
+    border-radius: 0;
+    padding: clamp(1.5rem, 4vw, 2.5rem) 0;
+    text-align: left;
+  }
+  .fallback-block--feature .kicker {
+    font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  }
+  .fallback-block--feature p:not(.kicker) {
+    max-width: 48rem;
+    margin: 0 0 1.75rem;
+    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+  }
+  .tuttocampo-link {
+    display: inline-block;
+    padding: 0.7rem 1.75rem;
+    background: var(--oro);
+    color: var(--bg);
+    font-family: var(--font-display);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.2s var(--ease-out-quart);
+  }
+  .tuttocampo-link:hover,
+  .tuttocampo-link:focus-visible {
+    background: color-mix(in oklch, var(--oro) 82%, var(--bg));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tuttocampo-link {
+      transition: none;
+    }
+  }
+</style>

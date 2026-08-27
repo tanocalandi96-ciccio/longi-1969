@@ -1,0 +1,40 @@
+{
+  "tappe": [
+    {
+      "anno": "1969",
+      "titolo": "La fondazione",
+      "testo": "Il Longi nasce nel 1969: la data compare sullo stemma del club, lo scudo dimezzato rosso e blu con il leone d'oro."
+    },
+    {
+      "anno": "1970-2021",
+      "titolo": "Gli anni del campo",
+      "testo": "Cinquant'anni di partite e domeniche al campo: materiale e ricordi in arrivo dalla società (da confermare)."
+    },
+    {
+      "anno": "2022",
+      "titolo": "Il ritiro",
+      "testo": "La società si ritira dal campionato di Prima Categoria. Seguono tre stagioni di assenza dal calcio giocato."
+    },
+    {
+      "anno": "2024",
+      "titolo": "La rifondazione",
+      "testo": "Dopo tre anni di assenza, il Longi riparte nella stagione 2024/25."
+    },
+    {
+      "anno": "2026",
+      "titolo": "Il double",
+      "testo": "Il Longi vince il campionato di Terza Categoria, girone di Barcellona P.G., con un turno di anticipo: 32 punti, 10 vittorie, 2 pareggi, 1 sconfitta, 19 gol fatti e 4 subiti, la miglior difesa del girone. Decide il gol promozione di Antonino Pidalà al 21', sul campo \"Biagio Fresina\", contro l'Academy Sant'Agata."
+    },
+    {
+      "anno": "2026/27",
+      "titolo": "Seconda Categoria, girone C",
+      "testo": "Forte della promozione conquistata sul campo, la squadra debutta nella nuova stagione in Seconda Categoria, girone C."
+    }
+  ],
+  "finale": {
+    "titolo": "Trofeo delle Province",
+    "sottotitolo": "La stessa stagione porta anche il trofeo: finale al \"Pippo Giacobbe\" di Rocca di Caprileone contro il Real Academy Acquedolci.",
+    "righe": ["0-2", "2-2", "6-5 dcr"],
+    "etichette": ["Sotto di due", "La rimonta", "Dal dischetto"]
+  }
+}

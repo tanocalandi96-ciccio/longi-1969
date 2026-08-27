@@ -1,0 +1,193 @@
+# Accesso con account GitHub. Netlify Identity e Git Gateway sono deprecati
+# (Netlify non ne corregge piu' i bug e ne sconsiglia l'uso sui siti nuovi),
+# quindi il pannello parla direttamente con GitHub: chi gestisce i contenuti
+# entra col proprio account GitHub e deve essere invitato come collaboratore
+# del repository.
+#
+# DA COMPILARE alla creazione del repository: sostituire UTENTE/REPOSITORY.
+backend:
+  name: github
+  repo: INSERIRE-UTENTE/INSERIRE-REPO
+  branch: main
+  # L'accesso passa da due funzioni ospitate sul sito stesso (netlify/functions):
+  # servono perche' lo scambio finale con GitHub richiede un segreto che non puo'
+  # stare in una pagina web. Nessun servizio esterno, nessun account in piu'.
+  # ALLA MESSA ONLINE: qui va il dominio definitivo, insieme a quello in
+  # astro.config.mjs e all'indirizzo di callback nell'applicazione GitHub.
+  base_url: INSERIRE-BASE-URL
+
+# Backend locale per le prove in sviluppo: decommentare e lanciare
+# `npx @sveltia/cms-proxy-server` per scrivere sul disco senza passare da
+# GitHub. Deve restare commentato in produzione.
+# local_backend: true
+
+media_folder: "public/img/uploads"
+public_folder: "/img/uploads"
+
+locale: "it"
+
+collections:
+  - name: "news"
+    label: "News"
+    folder: "src/content/news"
+    create: true
+    slug: "{{slug}}"
+    format: "frontmatter"
+    fields:
+      - { label: "Titolo", name: "title", widget: "string", required: true }
+      - { label: "Data", name: "date", widget: "datetime", required: true }
+      - { label: "Copertina", name: "cover", widget: "image", required: false, media_folder: "/img/uploads", public_folder: "/img/uploads" }
+      - { label: "Descrizione della foto (per chi non la vede)", name: "coverAlt", widget: "string", required: false, hint: "Poche parole su cosa mostra la foto." }
+      - { label: "Corpo", name: "body", widget: "markdown", required: false }
+
+  - name: "giocatori"
+    label: "Rosa"
+    folder: "src/content/giocatori"
+    create: true
+    slug: "{{fields.nome}}"
+    identifier_field: "nome"
+    format: "frontmatter"
+    fields:
+      - { label: "Nome", name: "nome", widget: "string", required: true }
+      - label: "Ruolo"
+        name: "ruolo"
+        widget: "select"
+        required: true
+        options: ["Portiere", "Difensore", "Centrocampista", "Attaccante"]
+      - { label: "Numero", name: "numero", widget: "number", value_type: "int", required: false }
+      - { label: "Foto", name: "foto", widget: "image", required: false, media_folder: "/img/uploads", public_folder: "/img/uploads" }
+
+  - name: "staff"
+    label: "Staff"
+    folder: "src/content/staff"
+    create: true
+    slug: "{{fields.nome}}"
+    identifier_field: "nome"
+    format: "frontmatter"
+    fields:
+      - { label: "Nome", name: "nome", widget: "string", required: true }
+      - { label: "Incarico", name: "incarico", widget: "string", required: true }
+      - { label: "Foto", name: "foto", widget: "image", required: false, media_folder: "/img/uploads", public_folder: "/img/uploads" }
+      - { label: "Ordine", name: "ordine", widget: "number", value_type: "int", required: false, default: 99 }
+
+  - name: "sponsor"
+    label: "Sponsor"
+    folder: "src/content/sponsor"
+    create: true
+    slug: "{{fields.nome}}"
+    identifier_field: "nome"
+    format: "frontmatter"
+    fields:
+      - { label: "Nome", name: "nome", widget: "string", required: true }
+      - label: "Livello"
+        name: "livello"
+        widget: "select"
+        required: true
+        options: ["main", "tecnico", "partner"]
+      - label: "Logo"
+        name: "logo"
+        widget: "image"
+        required: true
+        hint: "Se qui sotto metti il sito dello sponsor, il logo diventa cliccabile."
+        media_folder: "/img/uploads"
+        public_folder: "/img/uploads"
+      - label: "Sito web (o pagina Facebook)"
+        name: "url"
+        widget: "string"
+        required: false
+        hint: "Chi clicca il logo finisce qui, in una scheda nuova. Incolla l'indirizzo completo, da https:// in poi. Lascia vuoto se lo sponsor non ha un sito: il logo resta mostrato, semplicemente non si clicca."
+        pattern: ["^https?://\\S+$", "Deve iniziare con https:// (esempio: https://www.esempio.it)"]
+
+  # ------------------------------------------------------------------
+  # Testi delle pagine: prima erano scritti nel codice e per cambiarli
+  # serviva uno sviluppatore. Ora la societa' li modifica da sola.
+  # ------------------------------------------------------------------
+  - name: "impostazioni"
+    label: "Dati della società"
+    files:
+      - name: "societa"
+        label: "Dati e recapiti"
+        file: "src/data/societa.json"
+        description: "Compaiono nel footer, nella pagina Contatti e nell'informativa privacy. I campi lasciati vuoti non vengono mostrati."
+        fields:
+          - { label: "Denominazione completa", name: "denominazione", widget: "string", hint: "Come da statuto. Compare nell'informativa privacy." }
+          - { label: "Nome breve", name: "denominazioneBreve", widget: "string", hint: "Quello che si legge nel footer." }
+          - { label: "Codice fiscale", name: "codiceFiscale", widget: "string" }
+          - { label: "Matricola FIGC", name: "matricolaFigc", widget: "string", required: false }
+          - { label: "Comune", name: "comune", widget: "string" }
+          - { label: "Indirizzo della sede", name: "indirizzo", widget: "string", required: false, hint: "Via e numero civico. Obbligatorio per una privacy policy valida." }
+          - { label: "Telefono", name: "telefono", widget: "string", required: false }
+          - { label: "Email", name: "email", widget: "string", required: false }
+          - { label: "PEC", name: "pec", widget: "string", required: false }
+          - { label: "Nome del campo", name: "campoNome", widget: "string" }
+          - { label: "Indirizzo del campo", name: "campoIndirizzo", widget: "string" }
+          - { label: "Instagram", name: "instagram", widget: "string", required: false }
+          - { label: "Facebook", name: "facebook", widget: "string", required: false }
+          - { label: "Frase in home", name: "claimHome", widget: "text", hint: "La frase grande sotto lo stemma, in cima al sito. Andando a capo si va a capo anche sul sito." }
+
+      - name: "pagina-club"
+        label: "Pagina Club"
+        file: "src/data/pagina-club.json"
+        description: "La storia della società, in paragrafi. La linea del tempo con le tappe si modifica invece da \"Pagina Storia\" qui sotto."
+        fields:
+          - label: "Storia"
+            name: "storia"
+            widget: "list"
+            field: { label: "Paragrafo", name: "paragrafo", widget: "text" }
+            hint: "Un elemento per ogni paragrafo."
+
+      - name: "diretta"
+        label: "Diretta della partita"
+        file: "src/data/diretta.json"
+        description: "Attiva il riquadro con il conto alla rovescia in home. Ricordarsi di disattivarlo a partita finita."
+        fields:
+          - label: "Mostra il riquadro"
+            name: "attiva"
+            widget: "boolean"
+            default: false
+            hint: "Spegnere a partita finita, altrimenti il riquadro resta in home."
+          - label: "Titolo"
+            name: "titolo"
+            widget: "string"
+            required: false
+            hint: "Per esempio: Longi 1969 - Aluntina."
+          - label: "Ora del fischio d'inizio"
+            name: "inizio"
+            widget: "datetime"
+            hint: "Il conto alla rovescia parte da solo. All'ora indicata il riquadro passa alla diretta."
+          - label: "Link della diretta Facebook"
+            name: "urlVideo"
+            widget: "string"
+            required: false
+            hint: "Si incolla quando la diretta e' partita. Senza link, il riquadro invita a seguire la partita sulla pagina Facebook."
+
+      - name: "storia"
+        label: "Pagina Storia"
+        file: "src/data/storia.json"
+        description: "Le tappe della linea del tempo della pagina Storia e la sezione finale dedicata al trofeo."
+        fields:
+          - label: "Tappe"
+            name: "tappe"
+            widget: "list"
+            hint: "Una tappa per ogni evento importante, in ordine cronologico."
+            fields:
+              - { label: "Anno", name: "anno", widget: "string", hint: "Anche un periodo, es. 1970-2021." }
+              - { label: "Titolo", name: "titolo", widget: "string" }
+              - { label: "Testo", name: "testo", widget: "text" }
+          - label: "Finale (trofeo)"
+            name: "finale"
+            widget: "object"
+            hint: "Il riquadro speciale che spacca la linea del tempo, con il punteggio della partita."
+            fields:
+              - { label: "Titolo", name: "titolo", widget: "string" }
+              - { label: "Sottotitolo", name: "sottotitolo", widget: "text" }
+              - label: "Righe del punteggio"
+                name: "righe"
+                widget: "list"
+                hint: "Un elemento per ogni riga, es. 0-2, 2-2, 6-5 dcr."
+                field: { label: "Punteggio", name: "punteggio", widget: "string" }
+              - label: "Etichette"
+                name: "etichette"
+                widget: "list"
+                hint: "Una etichetta per ogni riga del punteggio, nello stesso ordine, es. Sotto di due."
+                field: { label: "Etichetta", name: "etichetta", widget: "string" }

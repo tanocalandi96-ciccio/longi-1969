@@ -1,0 +1,76 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import HeroProvvisorio from "../components/HeroProvvisorio.astro";
+import NewsCard from "../components/NewsCard.astro";
+import Spaccatura from "../components/Spaccatura.astro";
+import SponsorStrip from "../components/SponsorStrip.astro";
+import NextMatch from "../components/NextMatch.astro";
+import DirettaLive from "../components/DirettaLive.astro";
+
+const news = (await getCollection("news"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+<Base title="Home">
+  <main id="main" tabindex="-1">
+    <HeroProvvisorio />
+
+    <DirettaLive />
+
+    <section class="news-section" aria-labelledby="news-title">
+      <div class="section-inner">
+        <h2 id="news-title" class="font-display">Ultime notizie</h2>
+        <div class="news-grid">
+          {news.map((post) => <NewsCard post={post} />)}
+        </div>
+        <p class="all-news"><a href="/news">Tutte le news</a></p>
+      </div>
+    </section>
+
+    <Spaccatura />
+
+    <NextMatch />
+
+    <Spaccatura inverti />
+
+    <SponsorStrip />
+  </main>
+</Base>
+<style>
+  .news-section {
+    padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 2.5rem) clamp(2rem, 6vw, 4rem);
+  }
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .news-section h2 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin: 0 0 1.5rem;
+  }
+  .news-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 720px) {
+    .news-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .news-grid > :global(a:first-child) {
+      grid-column: span 2;
+    }
+  }
+  .all-news {
+    margin: 1.5rem 0 0;
+  }
+  .all-news a {
+    color: var(--oro);
+    text-decoration: none;
+  }
+  .all-news a:hover,
+  .all-news a:focus-visible {
+    text-decoration: underline;
+  }
+</style>
