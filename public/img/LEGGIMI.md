@@ -11,6 +11,14 @@ I due file arrivano da `assets/stemma-tuttocampo-150.png` e
 `assets/stemma-tuttocampo-500.png` (fuori da `public/`, non serviti dal
 sito): quelli restano come sorgente originale, non vanno toccati.
 
+## `og.jpg`: anteprima social, DEFINITIVO FINCHÉ NON ARRIVA MATERIALE FOTOGRAFICO
+
+Immagine mostrata quando un link al sito viene condiviso (WhatsApp, Facebook,
+Instagram...), letta da `Base.astro` (`og:image`). È lo stemma centrato su
+fondo blu notte del sito, 1200×630. Resta così finché la società non manda
+foto vere (squadra, campo, tifo): a quel punto si sostituisce con una di
+quelle, mantenendo le stesse dimensioni.
+
 ## `sponsor-demo/`: fittizi, DA SOSTITUIRE
 
 Loghi disegnati per quattro sponsor **inventati** (Edil Longi Costruzioni,

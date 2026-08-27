@@ -76,7 +76,9 @@ const srcVideo = urlVideo
     font-size: 0.85rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--rosso);
+    /* --rosso puro sul fondo rossastro qui sotto sta a ~2.9:1. Schiarito
+       verso --text: 5.47:1 (verificato via OKLCH -> luminanza, vedi report). */
+    color: color-mix(in oklch, var(--rosso) 60%, var(--text));
   }
   .pallino {
     width: 9px;

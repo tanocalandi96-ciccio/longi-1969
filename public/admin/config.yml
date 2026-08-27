@@ -37,6 +37,7 @@ collections:
       - { label: "Titolo", name: "title", widget: "string", required: true }
       - { label: "Data", name: "date", widget: "datetime", required: true }
       - { label: "Copertina", name: "cover", widget: "image", required: false, media_folder: "/img/uploads", public_folder: "/img/uploads" }
+      - { label: "Descrizione della foto (per chi non la vede)", name: "coverAlt", widget: "string", required: false, hint: "Poche parole su cosa mostra la foto." }
       - { label: "Corpo", name: "body", widget: "markdown", required: false }
 
   - name: "giocatori"
@@ -122,25 +123,18 @@ collections:
           - { label: "Indirizzo del campo", name: "campoIndirizzo", widget: "string" }
           - { label: "Instagram", name: "instagram", widget: "string", required: false }
           - { label: "Facebook", name: "facebook", widget: "string", required: false }
-          - { label: "Frase in home", name: "claimHome", widget: "text", hint: "La frase grande sopra la foto del pubblico. Andando a capo si va a capo anche sul sito." }
+          - { label: "Frase in home", name: "claimHome", widget: "text", hint: "La frase grande sotto lo stemma, in cima al sito. Andando a capo si va a capo anche sul sito." }
 
       - name: "pagina-club"
         label: "Pagina Club"
         file: "src/data/pagina-club.json"
-        description: "La storia della società e le tappe della linea del tempo."
+        description: "La storia della società, in paragrafi. La linea del tempo con le tappe si modifica invece da \"Pagina Storia\" qui sotto."
         fields:
           - label: "Storia"
             name: "storia"
             widget: "list"
             field: { label: "Paragrafo", name: "paragrafo", widget: "text" }
             hint: "Un elemento per ogni paragrafo."
-          - label: "Tappe della linea del tempo"
-            name: "tappe"
-            widget: "list"
-            fields:
-              - { label: "Anno", name: "anno", widget: "string", hint: "Anche un periodo, es. 2018-2024." }
-              - { label: "Titolo", name: "titolo", widget: "string" }
-              - { label: "Testo", name: "testo", widget: "text" }
 
       - name: "diretta"
         label: "Diretta della partita"

@@ -57,8 +57,8 @@ Poi si entra da `/admin` con *Sign In with GitHub*.
   indirizzo, contatti, PEC, nome e indirizzo del campo, social, frase grande
   in home. Alimentano footer, Contatti e informativa privacy. I campi vuoti
   spariscono dal sito invece di lasciare righe a metà.
-- **Pagina Club**: la storia della società (un paragrafo per riquadro) e le
-  tappe della sua linea del tempo.
+- **Pagina Club**: la storia della società (un paragrafo per riquadro). La
+  linea del tempo con le tappe si modifica dalla voce "Pagina Storia" qui sotto.
 - **Pagina Storia**: le tappe della timeline dedicata (1969-oggi) e il
   riquadro finale con il punteggio del Trofeo delle Province.
 - **Diretta partita**: un interruttore che attiva in home un riquadro con
@@ -225,7 +225,7 @@ ogni news).
 ### 2.3 Widget Tuttocampo: generare il GUID del girone
 
 Il girone è noto: **Seconda Categoria, Girone C Sicilia**, stagione
-2026-27. `src/lib/tuttocampo.ts` ha già `TEAM_ID = "1043634"` e `TEAM_PAGE`
+2026/27. `src/lib/tuttocampo.ts` ha già `TEAM_ID = "1043634"` e `TEAM_PAGE`
 corretti (scheda squadra:
 `https://www.tuttocampo.it/Sicilia/SecondaCategoria/GironeC/Squadra/Longi/1043634/Scheda`),
 ma la costante `GIRONE` è ancora il segnaposto `"INSERIRE-GUID"`. Finché

@@ -86,9 +86,8 @@ righe a metà, quindi è meglio lasciare vuoto che scrivere un dato sbagliato.
 **Dati della società → Pagina Club**.
 
 - **Storia**: un riquadro per ogni paragrafo. Premi *Add* per aggiungerne uno.
-- **Tappe della linea del tempo**: la sintesi che compare in questa pagina.
-  Ogni tappa ha anno, titolo e una descrizione breve. Si possono riordinare
-  trascinandole.
+  La linea del tempo con le tappe si modifica invece dalla **Pagina Storia**,
+  qui sotto.
 
 ---
 

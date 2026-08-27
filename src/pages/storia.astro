@@ -7,7 +7,10 @@ import storia from "../data/storia.json";
 // tappe fino alla vittoria, poi la sezione punteggio a parte, poi la
 // ripartenza. Si cerca l'anno invece di usare un indice fisso: l'ordine
 // resta corretto anche se il pannello (Task 10) riordina le tappe.
-const indiceDouble = storia.tappe.findIndex((t) => t.anno === "2026");
+const trovato = storia.tappe.findIndex((t) => t.anno === "2026");
+// Fallback: se manca una tappa con anno "2026" (dato pannello incompleto),
+// tutte le tappe finiscono prima del finale invece che tutte dopo.
+const indiceDouble = trovato === -1 ? storia.tappe.length - 1 : trovato;
 const primaDelDouble = storia.tappe.slice(0, indiceDouble + 1);
 const dopoIlDouble = storia.tappe.slice(indiceDouble + 1);
 
@@ -50,7 +53,7 @@ function scalaAnno(anno: string) {
     </section>
 
     {primaDelDouble.map((t, indice) => (
-      <section class="tappa">
+      <section class:list={["tappa", { alterna: indice % 2 === 1 }]}>
         <div class="inner">
           <span class={`anno-tappa font-display ${coloreAnno(t.anno, indice)}`} data-coro style={scalaAnno(t.anno)}>
             {spezzaAnno(t.anno).map((c) =>
@@ -94,7 +97,7 @@ function scalaAnno(anno: string) {
     <Spaccatura inverti />
 
     {dopoIlDouble.map((t, indice) => (
-      <section class="tappa">
+      <section class:list={["tappa", { alterna: indice % 2 === 1 }]}>
         <div class="inner">
           <span
             class={`anno-tappa font-display ${coloreAnno(t.anno, indiceDouble + 1 + indice)}`}
@@ -138,7 +141,11 @@ function scalaAnno(anno: string) {
   .tappa {
     padding: clamp(2.5rem, 7vw, 4.5rem) clamp(1rem, 4vw, 2.5rem);
   }
-  .tappa:nth-of-type(even) {
+  /* Classe esplicita invece di :nth-of-type(even): quest'ultimo conta i
+     <section> fratelli (intro, finale-double, Spaccatura...), quindi
+     l'alternanza si sfasava a seconda di cosa c'era prima. Con la classe
+     l'indice viene dal map, non dai fratelli. */
+  .tappa.alterna {
     background: var(--surface);
   }
   .tappa .inner {
@@ -159,8 +166,14 @@ function scalaAnno(anno: string) {
     line-height: 0.85;
     font-variant-numeric: tabular-nums;
   }
-  .anno-tappa.rosso { color: var(--rosso); }
-  .anno-tappa.blu { color: var(--blu); }
+  /* Anni non in --oro: --rosso/--blu puri contro --bg/--surface stanno
+     sotto 4.5:1 (fino a ~1.4:1 per --blu). Schiariti verso --text quel
+     tanto che basta a restare AA su ENTRAMBI i fondi possibili (l'anno
+     puo' cadere su --bg o --surface a seconda della striscia), verificato
+     via OKLCH -> luminanza (vedi report): blu 45% = 5.93:1 su --bg,
+     5.25:1 su --surface; rosso 55% = 7.42:1 su --bg, 6.57:1 su --surface. */
+  .anno-tappa.rosso { color: color-mix(in oklch, var(--rosso) 55%, var(--text)); }
+  .anno-tappa.blu { color: color-mix(in oklch, var(--blu) 45%, var(--text)); }
   .anno-tappa.oro { color: var(--oro); }
 
   .cifra,
