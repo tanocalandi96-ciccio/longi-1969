@@ -33,6 +33,8 @@ const titolo = page.currentPage > 1 ? `News, pagina ${page.currentPage}` : "News
             : "Tutte le notizie del club"}
         </p>
 
+        <!-- fascia decorativa omessa: nessuna fototeca ambiente per Longi -->
+
         {page.data.length > 0 ? (
           <div class="news-grid">
             {page.data.map((post) => <NewsCard post={post} />)}

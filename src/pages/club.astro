@@ -5,6 +5,7 @@ import Base from "../layouts/Base.astro";
 // completa vive nella pagina Storia (arriva in un task successivo): qui
 // resta solo il riassunto con le tappe verificate.
 import paginaClub from "../data/pagina-club.json";
+import societa from "../data/societa.json";
 ---
 <Base title="Club" description="La storia e il campo del Longi 1969">
   <main id="main" tabindex="-1">
@@ -19,7 +20,11 @@ import paginaClub from "../data/pagina-club.json";
     <section class="campo">
       <div class="inner">
         <h2 class="font-display">Il campo</h2>
-        <p class="campo-nome">Campo comunale di Longi (nome da confermare)</p>
+        {societa.campoNome ? (
+          <p class="campo-nome">Campo sportivo &quot;{societa.campoNome}&quot;</p>
+        ) : (
+          <p class="campo-nome">Campo comunale di Longi (nome da confermare)</p>
+        )}
         <p class="campo-nota">L'indirizzo esatto e la mappa saranno pubblicati non appena confermati dalla società.</p>
         <!-- mappa: arriva col task GDPR -->
       </div>
