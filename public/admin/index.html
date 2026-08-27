@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Gestione contenuti - Longi 1969</title>
+</head>
+<body>
+  <!--
+    Pannello di gestione contenuti (Sveltia CMS).
+
+    Perche' Sveltia e non Decap: Decap si appoggiava a Netlify Identity e Git
+    Gateway, che Netlify ha deprecato, non corregge piu' e sconsiglia sui siti
+    nuovi. Sveltia riusa la stessa configurazione (public/admin/config.yml) ma
+    parla direttamente con GitHub, quindi non dipende da un pezzo abbandonato.
+
+    Chi gestisce i contenuti entra con il proprio account GitHub e deve essere
+    invitato come collaboratore del repository. Istruzioni in docs/HANDOFF.md.
+  -->
+  <script src="https://unpkg.com/@sveltia/cms@0.129.0/dist/sveltia-cms.js" type="module"></script>
+</body>
+</html>
