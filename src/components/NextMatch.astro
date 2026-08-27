@@ -41,19 +41,17 @@ import TuttocampoWidget from "./TuttocampoWidget.astro";
     display: grid;
     grid-template-columns: 1fr;
     gap: clamp(2rem, 5vw, 3rem);
-    /* Da' profondita' all'ingresso dei tabelloni: senza prospettiva il
-       rotateY qui sotto sarebbe solo uno schiacciamento orizzontale. */
-    perspective: 1200px;
   }
 
-  /* Ingresso dal tunnel: i due tabelloni scivolano dai lati opposti e si
-     assestano di piatto, legati allo scroll. Stesse avvertenze dei titoli
-     (vedi atmosphere.css): SOLO proprieta' animation-* estese, il minificatore
-     fonde la scorciatoia con animation-timeline e il browser scarta tutto. */
+  /* Wipe diagonale: i tabelloni si rivelano col taglio obliquo dello scudo
+     (stessa grammatica della Spaccatura), uno da sinistra e uno da destra,
+     legati allo scroll. SOLO proprieta' animation-* estese: il minificatore
+     fonde la scorciatoia con animation-timeline e il browser scarta tutto
+     (bug documentato in tana.css). */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
       .riquadro {
-        animation-name: tunnel-sx;
+        animation-name: wipe-scudo-sx;
         animation-duration: 1s;
         animation-fill-mode: both;
         animation-timing-function: var(--ease-out-quart);
@@ -61,29 +59,33 @@ import TuttocampoWidget from "./TuttocampoWidget.astro";
         animation-range: entry 0% cover 30%;
       }
       .riquadro:last-child {
-        animation-name: tunnel-dx;
+        animation-name: wipe-scudo-dx;
       }
     }
   }
 
-  @keyframes tunnel-sx {
+  @keyframes wipe-scudo-sx {
     from {
       opacity: 0;
-      transform: translateX(-3.5rem) rotateY(16deg);
+      clip-path: polygon(0 0, 12% 0, -8% 100%, 0 100%);
+      transform: translateX(-1.25rem);
     }
     to {
       opacity: 1;
-      transform: none;
+      clip-path: polygon(0 0, 120% 0, 100% 100%, 0 100%);
+      transform: translateX(0);
     }
   }
-  @keyframes tunnel-dx {
+  @keyframes wipe-scudo-dx {
     from {
       opacity: 0;
-      transform: translateX(3.5rem) rotateY(-16deg);
+      clip-path: polygon(88% 0, 100% 0, 100% 100%, 108% 100%);
+      transform: translateX(1.25rem);
     }
     to {
       opacity: 1;
-      transform: none;
+      clip-path: polygon(-20% 0, 100% 0, 100% 100%, 0 100%);
+      transform: translateX(0);
     }
   }
 
@@ -91,18 +93,22 @@ import TuttocampoWidget from "./TuttocampoWidget.astro";
      elementi [data-reveal] e accende .reveal-on via IntersectionObserver. */
   .riquadro.reveal-js {
     opacity: 0;
-    transform: translateX(-3.5rem) rotateY(16deg);
+    clip-path: polygon(0 0, 12% 0, -8% 100%, 0 100%);
+    transform: translateX(-1.25rem);
     transition:
       opacity 0.9s var(--ease-out-quart),
+      clip-path 0.9s var(--ease-out-quart),
       transform 0.9s var(--ease-out-quart);
   }
   .riquadro:last-child.reveal-js {
-    transform: translateX(3.5rem) rotateY(-16deg);
+    clip-path: polygon(88% 0, 100% 0, 100% 100%, 108% 100%);
+    transform: translateX(1.25rem);
     transition-delay: 0.12s;
   }
   .riquadro.reveal-on {
     opacity: 1;
-    transform: none;
+    clip-path: polygon(-20% 0, 120% 0, 100% 100%, 0 100%);
+    transform: translateX(0);
   }
   /* Affiancate solo quando c'e' spazio vero: sotto i 860px due tabellini
      stretti diventano illeggibili. */
