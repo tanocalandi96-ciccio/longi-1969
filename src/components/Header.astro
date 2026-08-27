@@ -6,7 +6,7 @@ const items = [
 const path = Astro.url.pathname;
 ---
 <header class="site-header">
-  <a href="/" class="brand"><img src="/img/stemma.png" alt="Stemma Longi 1969" width="44" height="44" /><span>Longi 1969</span></a>
+  <a href="/" class="brand"><img src="/img/stemma.png" alt="Stemma Longi 1969" width="44" height="44" /><span>Longi <b class="anno">1969</b></span></a>
   <nav aria-label="principale">
     <ul class="nav-desktop">
       {items.map(([href, label]) => (
@@ -30,7 +30,20 @@ const path = Astro.url.pathname;
   .brand { display: flex; gap: 0.6rem; align-items: center; color: var(--text); text-decoration: none; font-family: var(--font-display); font-size: 1.15rem; white-space: nowrap; flex-shrink: 0; }
   ul { display: flex; gap: 1.5rem; list-style: none; padding: 0; margin: 0; }
   a { color: var(--text); text-decoration: none; }
-  a[aria-current="page"] { color: var(--oro); text-decoration: underline; text-decoration-color: var(--oro); text-underline-offset: 0.25rem; }
+  a { position: relative; }
+  /* Voce attiva: tacca a parallelogramma sotto il testo, non sottolineatura. */
+  a[aria-current="page"] { color: var(--oro); }
+  a[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: -0.4rem;
+    height: 3px;
+    background: var(--oro);
+    transform: skewX(-20deg);
+  }
+  .brand .anno { color: var(--oro); font-weight: inherit; }
   a:hover { color: var(--oro); }
   .menu { display: none; }
   .menu summary { cursor: pointer; list-style: none; color: var(--text); font-family: var(--font-body); padding: 0.4rem 0.6rem; }

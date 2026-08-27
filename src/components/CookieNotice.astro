@@ -35,7 +35,12 @@
     z-index: 40;
     background: var(--surface);
     color: var(--text);
-    padding: 0.7rem clamp(1rem, 4vw, 2.5rem);
+    /* Taglio diagonale in alto + filo rossoblu' dimezzato: la grammatica
+       dello scudo anche qui, al posto della barra piatta del gemello. */
+    clip-path: polygon(0 14px, 100% 0, 100% 100%, 0 100%);
+    border-top: 3px solid transparent;
+    border-image: linear-gradient(102deg, var(--rosso) 0 54%, var(--blu) 54% 100%) 1;
+    padding: 1.1rem clamp(1rem, 4vw, 2.5rem) 0.7rem;
     border-top: 1px solid var(--oro);
     transform: translateY(120%);
     transition: transform 0.4s var(--ease-out-quart);
@@ -69,7 +74,13 @@
   }
   /* Stesso peso visivo per le due scelte: rifiutare deve costare quanto
      accettare, non di piu'. */
-  .cn-primario { background: var(--oro); color: var(--bg); }
+  .cn-primario {
+    background: var(--oro);
+    color: var(--bg);
+    /* parallelogramma: il taglio e' del bottone, il testo resta dritto */
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    padding-inline: 1.3rem;
+  }
   .cn-primario:hover, .cn-primario:focus-visible { background: color-mix(in oklch, var(--oro) 82%, var(--bg)); }
   .cn-secondario { background: transparent; color: var(--text); }
   .cn-secondario:hover, .cn-secondario:focus-visible { background: var(--bg); color: var(--oro); }

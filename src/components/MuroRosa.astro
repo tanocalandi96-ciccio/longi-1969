@@ -1,0 +1,186 @@
+---
+// Il MURO ROSSOBLU': tutta la rosa come lastre diagonali affiancate, una
+// fisarmonica. A riposo ogni giocatore e' una lastra stretta col nome in
+// verticale; su hover/focus la lastra si allarga e rivela foto a colori,
+// nome e numero. Il click apre la stessa scheda dei PlayerCard (stessi
+// attributi data-player letti da PlayerDialog).
+// Sostituisce la parete curva 3D, che resta la voce del sito gemello.
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  players: CollectionEntry<"giocatori">[];
+}
+const { players } = Astro.props;
+---
+<section class="muro-sezione" aria-label="La rosa, colpo d'occhio">
+  <div class="muro" data-reveal>
+    {players.map((g, i) => (
+      <button
+        type="button"
+        class:list={["lastra", i % 2 === 0 ? "rossa" : "blu"]}
+        data-player
+        data-nome={g.data.nome}
+        data-ruolo={g.data.ruolo}
+        data-numero={g.data.numero ?? ""}
+        data-foto={g.data.foto ?? ""}
+        aria-label={`Apri la scheda di ${g.data.nome}`}
+      >
+        <img
+          src={g.data.foto || "/img/silhouette.svg"}
+          alt=""
+          class="lastra-foto"
+          loading="lazy"
+        />
+        <span class="lastra-nome font-display">{g.data.nome}</span>
+        {g.data.numero !== undefined && (
+          <span class="lastra-numero font-display" aria-hidden="true">{g.data.numero}</span>
+        )}
+      </button>
+    ))}
+  </div>
+</section>
+<style>
+  .muro-sezione {
+    /* Il muro sborda: le lastre inclinate mangiano i bordi apposta. */
+    overflow: hidden;
+    padding-block: clamp(1.5rem, 4vw, 3rem);
+  }
+  .muro {
+    display: flex;
+    height: clamp(300px, 44vh, 440px);
+    transform: skewX(-6deg) translateX(-1.5%);
+    width: 104%;
+  }
+  .lastra {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    overflow: hidden;
+    isolation: isolate;
+    transition: flex-grow 0.5s var(--ease-out-quart);
+    border-inline: 1px solid color-mix(in oklch, var(--oro) 25%, transparent);
+  }
+  .lastra.rossa { background: color-mix(in oklch, var(--rosso-fondo) 80%, var(--bg)); }
+  .lastra.blu { background: color-mix(in oklch, var(--blu) 55%, var(--bg)); }
+  .lastra:hover,
+  .lastra:focus-visible {
+    flex-grow: 3.2;
+  }
+  .lastra:focus-visible {
+    outline: 2px solid var(--oro);
+    outline-offset: -2px;
+  }
+  /* Il contenuto compensa l'inclinazione del muro. */
+  .lastra-foto {
+    position: absolute;
+    inset: auto -15% 0;
+    width: 130%;
+    height: 88%;
+    object-fit: contain;
+    object-position: bottom center;
+    transform: skewX(6deg);
+    filter: grayscale(1) brightness(0.85);
+    transition: filter 0.4s var(--ease-out-quart);
+  }
+  .lastra:hover .lastra-foto,
+  .lastra:focus-visible .lastra-foto {
+    filter: grayscale(0) brightness(1);
+  }
+  .lastra-nome {
+    position: absolute;
+    top: 0.9rem;
+    left: 50%;
+    transform: translateX(-50%) skewX(6deg);
+    writing-mode: vertical-rl;
+    color: var(--text);
+    font-size: clamp(0.8rem, 1.6vw, 1.05rem);
+    letter-spacing: 0.04em;
+    max-height: 55%;
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: 1;
+    transition: opacity 0.3s var(--ease-out-quart);
+  }
+  .lastra:hover .lastra-nome,
+  .lastra:focus-visible .lastra-nome {
+    writing-mode: horizontal-tb;
+    max-height: none;
+    left: 1.2rem;
+    transform: skewX(6deg);
+    font-size: clamp(1rem, 2vw, 1.4rem);
+  }
+  .lastra-numero {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.9rem;
+    transform: skewX(6deg);
+    color: var(--oro);
+    font-size: clamp(1.4rem, 3vw, 2.4rem);
+    font-variant-numeric: tabular-nums;
+    opacity: 0;
+    transition: opacity 0.35s var(--ease-out-quart);
+    z-index: 1;
+  }
+  .lastra:hover .lastra-numero,
+  .lastra:focus-visible .lastra-numero {
+    opacity: 1;
+  }
+
+  /* Telefono: la fisarmonica orizzontale non ha senso con dieci lastre su
+     uno schermo stretto. Il muro diventa una pila di bande basse con lo
+     stesso taglio diagonale; il tocco apre direttamente la scheda. */
+  @media (max-width: 719px) {
+    .muro {
+      flex-direction: column;
+      height: auto;
+      transform: none;
+      width: 100%;
+      gap: 2px;
+    }
+    .lastra {
+      height: 3.4rem;
+      clip-path: polygon(0 0, 100% 6%, 100% 100%, 0 94%);
+      border-inline: none;
+    }
+    .lastra:hover,
+    .lastra:focus-visible {
+      flex-grow: 1;
+    }
+    .lastra-foto {
+      inset: -55% 0 auto auto;
+      width: 38%;
+      height: auto;
+      transform: none;
+    }
+    .lastra-nome,
+    .lastra:hover .lastra-nome,
+    .lastra:focus-visible .lastra-nome {
+      writing-mode: horizontal-tb;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+      max-height: none;
+      font-size: 1rem;
+    }
+    .lastra-numero {
+      opacity: 1;
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
+      font-size: 1.3rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lastra,
+    .lastra-foto,
+    .lastra-nome,
+    .lastra-numero {
+      transition: none;
+    }
+  }
+</style>

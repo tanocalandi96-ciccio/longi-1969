@@ -33,31 +33,35 @@
 
 <style>
   .player-dialog {
-    border: 1px solid var(--oro);
+    border: none;
+    /* Bordo alto dimezzato come lo scudo: meta' rossa e meta' blu. */
+    border-top: 4px solid transparent;
+    border-image: linear-gradient(102deg, var(--rosso) 0 54%, var(--blu) 54% 100%) 1;
     background: var(--surface);
     color: var(--text);
     padding: 0;
     max-width: min(640px, 92vw);
     width: 100%;
-    /* stato di partenza dell'animazione */
+    /* stato di partenza: la scheda si rivela con un taglio diagonale,
+       come tutto il resto del sito. */
     opacity: 0;
-    transform: scale(0.94) translateY(12px);
+    clip-path: polygon(0 0, 18% 0, -12% 100%, 0 100%);
     transition:
-      opacity 0.28s var(--ease-out-quart),
-      transform 0.28s var(--ease-out-quart),
-      overlay 0.28s allow-discrete,
-      display 0.28s allow-discrete;
+      opacity 0.32s var(--ease-out-quart),
+      clip-path 0.38s var(--ease-out-quart),
+      overlay 0.38s allow-discrete,
+      display 0.38s allow-discrete;
   }
   .player-dialog[open] {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    clip-path: polygon(0 0, 130% 0, 115% 100%, 0 100%);
   }
   /* @starting-style serve perche' l'elemento passa da display:none a visibile:
      senza, il browser non ha uno stato iniziale da cui animare. */
   @starting-style {
     .player-dialog[open] {
       opacity: 0;
-      transform: scale(0.94) translateY(12px);
+      clip-path: polygon(0 0, 18% 0, -12% 100%, 0 100%);
     }
   }
   .player-dialog::backdrop {

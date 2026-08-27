@@ -112,6 +112,14 @@ Grammatica propria: "tutto taglia in diagonale, la tana respira braci d'oro".
 - **Tabelloni partita**: wipe diagonale con clip-path (il tunnel prospettico resta a Galati).
 - **Fascia sponsor**: banda inclinata di -2 gradi che taglia la pagina scura.
 - **Card giocatori**: lama di luce dorata obliqua su hover/focus (il colpo del leone).
+- **Muro rossoblu'** (`src/components/MuroRosa.astro`): la rosa come fisarmonica di lastre diagonali (hover: la lastra si allarga, foto a colori, numero d'oro; mobile: pila di bande). Ha SOSTITUITO la parete curva 3D, che resta al gemello.
+- **News "banda dimezzata"**: titolo su banda rosso/blu tagliata in diagonale, data su cartellino d'oro inclinato, griglia a mosaico sfalsato su 3 colonne (il gemello: titolo in sovraimpressione sulla foto, prima notizia doppia).
+- **Home riordinata**: hero -> partite -> news (il gemello mette le news prima).
+- **Scheda giocatore**: si rivela con taglio diagonale, bordo alto dimezzato rosso/blu.
+- **Articoli**: barra di lettura IN BASSO con le due meta' rossoblu' che si chiudono verso il centro; titolo ridotto che sale dal fondo con taglio obliquo.
+- **Transizioni pagina**: sipario diagonale (il gemello scorre in verticale).
+- **Barra cookie**: taglio diagonale in alto, filo rossoblu', bottone a parallelogramma.
+- **Header**: tacca a parallelogramma oro sotto la voce attiva, "1969" in oro nel brand.
 
 ## Componenti chiave
 
