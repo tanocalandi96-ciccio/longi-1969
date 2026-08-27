@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import CookieNotice from "../components/CookieNotice.astro";
 interface Props { title: string; description?: string }
 const { title, description = "Sito ufficiale Longi 1969" } = Astro.props;
 const fullTitle = `${title} - Longi 1969`;
@@ -39,7 +40,7 @@ const ogImage = new URL("/img/og.jpg", Astro.site ?? Astro.url).href;
     <Header />
     <slot />
     <Footer />
-    <!-- CookieNotice: arriva col task GDPR -->
+    <CookieNotice />
     <script>
       // Ripiego per il reveal dei titoli nei browser senza animation-timeline
       // (Firefox, Safari meno recenti): stessa resa, via IntersectionObserver.
