@@ -69,10 +69,11 @@ const { kicker, testo } = FALLBACK_COPY[type];
 
 // Altezze consigliate da Tuttocampo per ciascun widget: la classifica di un
 // girone ha molte righe, il box della prossima partita e' compatto.
-// Valori ereditati da Galati (girone diverso, numero di squadre diverso):
-/* altezze da rimisurare col GUID reale */
+// Classifica misurata sul contenuto reale del girone C (05/09/2026,
+// 12 squadre): 752px. Gli altri widget erano ancora vuoti alla misura,
+// restano sulle altezze consigliate da Tuttocampo.
 const MIN_HEIGHT: Record<WidgetType, string> = {
-  classifica: "700px",
+  classifica: "760px",
   risultati: "600px",
   marcatori: "620px",
   partita: "380px",

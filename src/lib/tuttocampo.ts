@@ -12,11 +12,7 @@ export const TEAM_PAGE = "https://www.tuttocampo.it/Sicilia/SecondaCategoria/Gir
 // esiste il parametro "?y=2025-26", che qui non usiamo di proposito: mostrare
 // la classifica dell'anno scorso sotto il titolo di quest'anno confonde.
 //
-// SEGNAPOSTO: il GUID vero arriva da un passo manuale (generatore Tuttocampo,
-// login -> Sicilia -> Seconda Categoria -> Girone C). Finche' resta
-// "INSERIRE-GUID", TuttocampoWidget.astro salta il fetch di build e mostra il
-// fallback on-brand: vedi il commento li' per il dettaglio.
-const GIRONE = "INSERIRE-GUID";
+const GIRONE = "91a039e3-da42-4cd2-968b-fa8288ffcce7";
 
 // Tipi che Tuttocampo offre davvero (verificati uno per uno: un tipo
 // "Calendario" NON esiste, quell'URL risponde 404).
